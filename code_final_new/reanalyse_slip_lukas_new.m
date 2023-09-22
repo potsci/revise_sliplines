@@ -121,6 +121,25 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang]=compareInrange(SE,line,hSSt,col,TA,size(h,2));
+          %
+           
+% %      %%
+%           line_t=table(horzcat(line.point1),horzcat(line.point2))
+          %%
+          
+          ass_d=shiftdim(ASS,1);
+          ass_r=reshape(ass_d,[],1);
+          devang_d=shiftdim(devang,1);
+          devang_r=reshape(devang_d,[],1);
+%           [row,col]= find(ass_d~=0)
+          ass_r=ass_r(ass_r~=0);
+          devang_r=devang_r(ass_r~=0);
+          line_test=struct2cell(line)
+           line_test=shiftdim(line_test,2)
+           line_test=repmat(line_test,1,1,5)
+           line_test=shiftdim(line_test,2)
+           line_test=reshape(line_test,[],1,2)
+           line_test=line_test(ass_r~=0,:,:)
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export
@@ -139,7 +158,7 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 %         assignin('caller',slip_name(n),[]);
 %     end
     write_statistic([selection.folder(1)],selection.file(1),Rep_counts,output_file,[oriI.phi1/degree,...
-            oriI.Phi/degree,oriI.phi2/degree],ASS,slip_name,devang,line2);
+            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line_test);
 %     Rep=input('\ncontinue to analyze new with same Alignment:','s');
 %     if strcmp(Rep,'y')
 %         Rep_counts=Rep_counts+1;

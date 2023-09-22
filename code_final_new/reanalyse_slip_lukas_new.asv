@@ -10,9 +10,9 @@ b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1
 % define the name of each system
 slip_name = ["111","100","110","112","115"];
 % define colors for slip lines
-col=['r','b','g','y']; % define color for each slip system
+col=['r','b','g','y','cyan']; % define color for each slip system
 TA=5; % threshold angle fore slip system determination
-Len =200; % the length of the theorectical lines in the right conner
+Len =100; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); %
 %%
@@ -72,32 +72,44 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
     %% Mark the slip traces
        fi=figure('units','normalized','outerposition',[0 0 1 1]);
        subplot(1,2,1)
-       imshow(SE_marked,'Border','tight')
-       title('extracted_line_image')
-       for k=1:numel(selection)
+       imshow(SE,'Border','tight')
+       title('extracted line image')
+       for k=1:size(selection,1)
            hold on
-           plot([selection.point1_x(k) selection.point2_x(k)],[selection.point1_y(k) selection.point2_y(k)])
+           disp(k)
+           plot([selection.point1_x(k) selection.point2_x(k)],[selection.point1_y(k) selection.point2_y(k)],':','color','black','linewidth',2)
        end
        subplot(1,2,2)
-       title("original image")
+       title("original image, mark missing ones")
        imshow(SE,'Border','tight');
        axis equal
-            line2=[];
-            i=1;
-%             while isempty(get(fi,'CurrentCharacter'))
-%                 hold on
-% %                 RPoints=readPoints2(2);
-%                 line2(i).point1=[joined_tab.point1_x joined_tab.point1_y];
-%                 line2(i).point2=[RPoints(2,:)];
-%                 i=i+1;
-%                 pause(1)
-%             end
+%             line2=[];
+            line=[]
+            for n=1:size(selection,1)
+                
+            line(n).point1=[selection.point1_x(n) selection.point1_y(n)]
+            line(n).point2=[selection.point2_x(n) selection.point2_y(n)]
+%             n=size(selection,1);
+            end
+            while isempty(get(fi,'CurrentCharacter'))
+                hold on
+                RPoints=readPoints2(2);
+                line(n).point1=[RPoints(1,:)];
+                line(n).point2=[RPoints(2,:)];
+                n=n+1;
+                pause(1)
+            end
+            close all
+            %%
+            
+            %%
+            
 %        subplot(1,2,1)
 %        imshow(SE_marked,'Border','tight')
 %        title('extracted_line_image')
     %% calculate the theoretical slip traces   
         for m=1:size(h,2)
-            th=symmetrise(h(i)); % symmetrise the plane
+            th=symmetrise(h(m)); % symmetrise the plane
             hSS=normalize(oriI*th); % convert to the specimen symmetery
             if hSS==vector3d.Z | hSS==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
@@ -108,29 +120,48 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
         end
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
-          ASS=compareInrange(SE,line2,hSSt,col,TA,size(h,2));
+          [ASS,devang]=compareInrange(SE,line,hSSt,col,TA,size(h,2));
+          %
+            line_test=struct2cell(line)
+           line_test=shiftdim(line_test,2)
+           %%
+           line_test=repmat(line_test,1,1,5)
+           line_test=shiftdim(line_test,2)
+           %%
+           line_test_reshape=(line_test,[],1,2)
+           
+% %      %%
+%           line_t=table(horzcat(line.point1),horzcat(line.point2))
+          %%
+          ass_d=shiftdim(ASS,1);
+          ass_r=reshape(ass_d,[],1);
+          devang_d=shiftdim(devang,1);
+          devang_r=reshape(devang_d,[],1);
+%           [row,col]= find(ass_d~=0)
+          ass_r=ass_r(ass_r~=0);
+          devang_r=devang_r(ass_r~=0);
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export
         fprintf ('\nDelete lines.')
         % check whether some lines need to be delect
-        Continue=input('\nContinue?y/n: ','s');
-        if strcmp(Continue,'y')
-            export_fig([path1 '\' file(1:end-4) '_' num2str(Rep_counts)],'-r100')
-            close 
-        end
+%         Continue=input('\nContinue?y/n: ','s');
+%         if strcmp(Continue,'y')
+%             export_fig([path1 '\' file(1:end-4) '_' num2str(Rep_counts) 'reanalyse'],'-r100')
+%             close 
+%         end
     %% statistics
-    if Rep_counts==1
-    output_file=input('\nplease input the document name of the out put file: ','s');
-    end
+%     if Rep_counts==1
+    output_file='reanalyse_slip'
+%     end
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
 %     end
-    write_statistic([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
-            oriI.Phi/degree,oriI.phi2/degree],ASS,slip_name,line2);
-    Rep=input('\ncontinue to analyze new with same Alignment:','s');
-    if strcmp(Rep,'y')
-        Rep_counts=Rep_counts+1;
-    end
+    write_statistic([selection.folder(1)],selection.file(1),Rep_counts,output_file,[oriI.phi1/degree,...
+            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line);
+%     Rep=input('\ncontinue to analyze new with same Alignment:','s');
+%     if strcmp(Rep,'y')
+%         Rep_counts=Rep_counts+1;
+%     end
 end
 end

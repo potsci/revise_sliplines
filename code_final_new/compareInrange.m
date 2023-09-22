@@ -28,7 +28,7 @@ function [Ss,devang]=compareInrange(SEI,line2,hSSt,col,TA,num_slipsystem)
                  SsM(i,1)=j;
              end
              if Anmin<TA 
-                 Ss(i,j)=1;
+                 Ss(i,j)=j;
                  devang(i,j)=Anmin;
              end 
          end
@@ -39,7 +39,7 @@ function [Ss,devang]=compareInrange(SEI,line2,hSSt,col,TA,num_slipsystem)
                 switch SsM(i,1)
                     case k
 %                        fprintf('line %d is %s \n', i, slip_name(k));
-                       plot(xy(:,1),xy(:,2),'LineWidth',2,'Color',col(k));
+%                        plot(xy(:,1),xy(:,2),'LineWidth',2,'Color',col(k));
                 end
              end
          end

@@ -171,6 +171,8 @@ while (strcmp(Rep,'y'))
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           ASS=compareInrange(SE,line2,hSSt,col,TA,size(h,2));
+          %%
+          
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export

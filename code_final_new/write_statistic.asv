@@ -9,7 +9,7 @@ function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,de
     %%
     disp(':)')
     % Import the data
-    output_old = readtable([subfolder{1},'\' output_file,'.xlsx'],'Sheet',1);
+    output_old = xlsread([subfolder{1},'\' output_file,'.xlsx'],1);
 %%
     size_old=size(output_old,1);
     image_index=repmat([file(1:end-4) '_' num2str(Rep_counts)],size(Ss,1),1);
@@ -17,8 +17,7 @@ function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,de
     phi1 = repmat(T(1),size(Ss,1),1);
     Phi = repmat(T(2),size(Ss,1),1);
     phi2 = repmat(T(3),size(Ss,1),1);
-%     slip
-    output_current=table(image_index,index, phi1, Phi, phi2, Ss,devang);
+    output_current=table(image_index,index, phi1, Phi, phi2, Ss,devang,line2.point1(1),line2.point1(2),line2.point2(1),line2.point2(2));
 %%
     writetable(output_current,[subfolder{1},'\',output_file, '.xlsx'],'Sheet',1,...
         'Range',['A',num2str(size_old+2)],'WriteVariableNames',0);
