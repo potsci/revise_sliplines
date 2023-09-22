@@ -189,7 +189,7 @@ while (strcmp(Rep,'y'))
 %         assignin('caller',slip_name(n),[]);
 %     end
     write_statistic([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
-            oriI.Phi/degree,oriI.phi2/degree],ASS,slip_name);
+            oriI.Phi/degree,oriI.phi2/degree],ASS,slip_name,line2);
     Rep=input('\ncontinue to analyze new with same Alignment:','s');
     if strcmp(Rep,'y')
         Rep_counts=Rep_counts+1;
