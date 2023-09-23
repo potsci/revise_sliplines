@@ -16,8 +16,16 @@ Len =100; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); %
 %%
-values=readtable('J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\export_all_lines.csv')
-eulers=readtable('J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\Area1_Indents1\Analyse_Indents1.xlsx')
+% values=readtable('J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\export_all_lines.csv')
+% eulers=readtable('J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\Area1_Indents1\Analyse_Indents1.xlsx')
+path='C:\Promo\von+Martina\Outcome_SlipLines'
+values=readtable('C:\Promo\von+Martina\Outcome_SlipLines\export_all_lines.csv')
+eulers=readtable('C:\Promo\von+Martina\Outcome_SlipLines\Area1_Indents1\Analyse_Indents1.xlsx')
+file_list=dir(fullfile([path '\\**\\*.png']))
+
+%%
+
+% strcmp(file_list.name,u_imgs(1))  
 % eulers=readtable(
 %%
 folders=unique(values.folder)
@@ -26,11 +34,18 @@ folders=unique(values.folder)
 % folders(1)
 % folders{1}
 selection=values(strcmp(folders{1},values.folder),:)
+%% if you want to restart from the beginning run this line again.
+% if not just run the loop again and the skript will start from the last
+% image you used (if I did get it right)
+control_i=1
+check_error=0
+control_j=1
 %%
-for i=1:numel(folders)
+
+for i=control_i:numel(folders)
 %%
 selection=values(strcmp(folders{i},values.folder),:);
-euler_t=table(u_imgs,eulers1,eulers2,eulers3);
+% euler_t=table(u_imgs,eulers1,eulers2,eulers3);
 %%
 imgs=eulers.Var1;
 eulers1=eulers.Var3;
@@ -44,7 +59,12 @@ eulers3=eulers3(index);
 euler_t=table(u_imgs,eulers1,eulers2,eulers3);
 joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 %%
-    for j=1:numel(u_imgs)
+if check_error==1
+control_j=1
+end
+    for j=control_j:numel(u_imgs)
+        check_error=0
+        
         %%
         selection=joined_tab(strcmp(u_imgs(j),joined_tab.file),:)
       
@@ -53,8 +73,8 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 %         SE_marked=imread([selection.folder{1},'\' selection.file{1}, '_extract_lines.png']);
         % input the euler angle
 %         T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
-        oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,joined_tab.eulers2(1)*degree,cs);
-%         oriI=Rot*oriI; % i think we can drop this, as the eulers are
+        oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,joined_tab.eulers3(1)*degree,cs);
+%          oriI=Rot*oriI; % i think we can drop this, as the eulers are
 %         saved after this step
         % loade SEM for the first time
 %         if Rep_counts==1
@@ -73,31 +93,39 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
        fi=figure('units','normalized','outerposition',[0 0 1 1]);
        subplot(1,2,1)
        imshow(SE,'Border','tight')
-       title('extracted line image')
+       title('extracted line image, check for missing ones')
        for k=1:size(selection,1)
            hold on
            disp(k)
            plot([selection.point1_x(k) selection.point2_x(k)],[selection.point1_y(k) selection.point2_y(k)],':','color','black','linewidth',2)
        end
+       
        subplot(1,2,2)
-       title("original image, mark missing ones")
+       
        imshow(SE,'Border','tight');
+       title("original image for comparison")
        axis equal
 %             line2=[];
             line=[]
+
             for n=1:size(selection,1)
                 
             line(n).point1=[selection.point1_x(n) selection.point1_y(n)]
             line(n).point2=[selection.point2_x(n) selection.point2_y(n)]
 %             n=size(selection,1);
             end
+
+            
+            
             while isempty(get(fi,'CurrentCharacter'))
                 hold on
                 RPoints=readPoints2(2);
-                line(n).point1=[RPoints(1,:)];
-                line(n).point2=[RPoints(2,:)];
+                if ~isempty(RPoints)
+                line(n+1).point1=[RPoints(1,:)];
+                line(n+1).point2=[RPoints(2,:)];
+                end
                 n=n+1;
-                pause(1)
+                pause(0.05)
             end
             close all
             %%
@@ -125,29 +153,35 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
            
 % %      %%
 %           line_t=table(horzcat(line.point1),horzcat(line.point2))
-          %%
+          %% A lot of unnecessary reshaping of the arrays
           
           ass_d=shiftdim(ASS,1);
-          ass_r=reshape(ass_d,[],1);
+          ass_temp=reshape(ass_d,[],1);
           devang_d=shiftdim(devang,1);
           devang_r=reshape(devang_d,[],1);
 %           [row,col]= find(ass_d~=0)
-          ass_r=ass_r(ass_r~=0);
-          devang_r=devang_r(ass_r~=0);
-          line_test=struct2cell(line)
-           line_test=shiftdim(line_test,2)
-           line_test=repmat(line_test,1,1,5)
-           line_test=shiftdim(line_test,2)
-           line_test=reshape(line_test,[],1,2)
-           line_test=line_test(ass_r~=0,:,:)
+          ass_r=ass_temp(ass_temp~=0);
+          devang_r=devang_r(ass_temp~=0);
+          line_test=struct2cell(line);
+           line_test=shiftdim(line_test,2);
+           line_test=repmat(line_test,1,1,size(slip_name,2));
+           line_test=shiftdim(line_test,2);
+           line_test=reshape(line_test,[],1,2);
+           line_test=line_test(ass_temp~=0,:,:);
+           img_ind=[1:(size(line,2))]';
+           img_ind=repmat(img_ind,1,size(slip_name,2));
+           img_ind=shiftdim(img_ind,1);
+           img_ind=reshape(img_ind,[],1);
+           %%
+           img_ind=img_ind(ass_temp~=0);
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export
-        fprintf ('\nDelete lines.')
+%         fprintf ('\nDelete lines.')
         % check whether some lines need to be delect
 %         Continue=input('\nContinue?y/n: ','s');
 %         if strcmp(Continue,'y')
-%             export_fig([path1 '\' file(1:end-4) '_' num2str(Rep_counts) 'reanalyse'],'-r100')
+            export_fig(fullfile([folders{i} '\' u_imgs{j} '_reanalyse.png']),'-r200')
 %             close 
 %         end
     %% statistics
@@ -157,11 +191,14 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
 %     end
-    write_statistic([selection.folder(1)],selection.file(1),Rep_counts,output_file,[oriI.phi1/degree,...
-            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line_test);
+    write_statistic([selection.folder(1)],selection.file(1),output_file,[oriI.phi1/degree,...
+            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line_test,img_ind);
 %     Rep=input('\ncontinue to analyze new with same Alignment:','s');
 %     if strcmp(Rep,'y')
 %         Rep_counts=Rep_counts+1;
 %     end
-end
+control_j=control_j+1
+check_error=1
+    end
+    control_i=control_i+1
 end
