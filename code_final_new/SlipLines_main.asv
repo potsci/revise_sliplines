@@ -153,11 +153,11 @@ while (strcmp(Rep,'y'))
                 hold on
                 RPoints=readPoints2(2);
                 if ~isempty(RPoints)
+                line2(n+1).point1=[RPoints(1,:)];
+                line2(n+1).point2=[RPoints(2,:)];
+                end
                 line2(i).point1=[RPoints(1,:)];
                 line2(i).point2=[RPoints(2,:)];
-                end
-%                 line2(i).point1=[RPoints(1,:)];
-%                 line2(i).point2=[RPoints(2,:)];
                 i=i+1;
                 pause(0.05)
             end
@@ -194,7 +194,7 @@ while (strcmp(Rep,'y'))
            line_test=shiftdim(line_test,2);
            line_test=reshape(line_test,[],1,2);
            line_test=line_test(ass_temp~=0,:,:);
-           img_ind=[1:(size(line2,2))]';
+           img_ind=[1:(size(line,2))]';
            img_ind=repmat(img_ind,1,size(slip_name,2));
            img_ind=shiftdim(img_ind,1);
            img_ind=reshape(img_ind,[],1);
@@ -217,7 +217,7 @@ while (strcmp(Rep,'y'))
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
 %     end
-    write_statistic_old([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
+    write_statistic([selection.folder(1)],selection.file(1),output_file,[oriI.phi1/degree,...
             oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line_test,img_ind);
     Rep=input('\ncontinue to analyze new with same Alignment:','s');
     if strcmp(Rep,'y')

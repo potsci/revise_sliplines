@@ -13,10 +13,14 @@ function oriI=GrainSelect(ebsdI,grainsI)
     if strcmp(A,'n')
         fprintf('\n Please select an interesting Point: ');
     else
+        %%
         [xy,~,~,~] = getDataCursorPos(gcm);
         id = findByLocation(ebsdI,[xy(1) xy(2)]);
-        grainsN=grainsI(ebsdI(id).grainId);
+        gid=ebsdI(id).grainId
+        disp(gid)
+        grainsN=grainsI(gid);
         oriI=grainsN.meanOrientation;
         close
+%%
     end
 end
