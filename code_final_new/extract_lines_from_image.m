@@ -1,4 +1,4 @@
-path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
+% path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
 %%
@@ -7,11 +7,17 @@ analysis=struct()
 %%
 % disp(asdfa)
 c=1
+ headline=["folder", "file","point1_x","point1_y","point2_x","point2_y"];
+%         writematrix(headline,[subfolder{1},'\', output_file, '.xlsx'],'Sheet',1,'Range','A1');
+         writematrix(headline,[path '\\export_all_lines.csv'],'Delimiter',';');
+
+% writematrix(shiftdim(struct2cell(analysis_unstacked),2),'export_all_lines.csv','FileType','text','Delimiter',';')
+
 for p=1:numel(file_list)
     %%
 %     n=file_list(p).name
 %     if(numel(n)+3>numel('_extract_lines'))
-    if ~contains(file_list(p).name,'_extract_lines')
+    if ~(contains(file_list(p).name,'_extract_lines') || contains(file_list(p).name,'_reanalyse'))
         disp(p)
 
 analysis(c).folder=file_list(p).folder;
@@ -32,9 +38,9 @@ img_sum=img1+img2+img3;
 % imshow(img_sum)
 
 %%
-imsize=size(img_sum)
+imsize=size(img_sum);
 %%
-slicing=uint32([0.2*imsize(2)-130,0.2*imsize(2)+130,0.8*imsize(2)-130,0.8*imsize(2)+130]);
+slicing=uint32([0.2*imsize(2)-100,0.2*imsize(2)+100,0.8*imsize(2)-100,0.8*imsize(2)+100]);
 img_sum(slicing(1):slicing(2),slicing(3):slicing(4))=0;
 img_bin=img_sum>0;
 
@@ -87,7 +93,7 @@ prop_img=props(i).Image;
 %%
 
 %%
-    P = houghpeaks(H,3,'threshold',ceil(0.3*max(H(:))),'NHoodSize',uneven(size(H)/3) );
+    P = houghpeaks(H,1,'threshold',ceil(0.5*max(H(:))),'NHoodSize',uneven(size(H)/3) );
 %%
     x = theta(P(:,2));
     y = rho(P(:,1));
@@ -130,8 +136,8 @@ c=c+1;
 %     end
 %     end
 %%
-disp('stuff')
-%      h=figure
+% disp('stuff')
+% %      h=figure
 %      imshow(img,'Border','tight'), hold on
 % %     max_len = 0;
 %      for k = 1:length(all_lines)
@@ -158,24 +164,24 @@ disp('stuff')
 % close all
     end
 end
-%%
-analysis_unstacked=[]
+
+analysis_unstacked=[];
 c=1
 for i =1:numel(analysis)
     
     disp(i)
     for j =1:numel(analysis(i).all_lines)
-        analysis_unstacked(c).folder=analysis(i).folder
-        analysis_unstacked(c).file=analysis(i).file
-        analysis_unstacked(c).point1_x=analysis(i).all_lines(j).point1(1)
-        analysis_unstacked(c).point1_y=analysis(i).all_lines(j).point1(2)
-        analysis_unstacked(c).point2_x=analysis(i).all_lines(j).point2(1)
-        analysis_unstacked(c).point2_y=analysis(i).all_lines(j).point2(2)
-        c=c+1
+        analysis_unstacked(c).folder=analysis(i).folder;
+        analysis_unstacked(c).file=analysis(i).file(1:end-4);
+        analysis_unstacked(c).point1_x=analysis(i).all_lines(j).point1(1);
+        analysis_unstacked(c).point1_y=analysis(i).all_lines(j).point1(2);
+        analysis_unstacked(c).point2_x=analysis(i).all_lines(j).point2(1);
+        analysis_unstacked(c).point2_y=analysis(i).all_lines(j).point2(2);
+        c=c+1;
     end
 end
-%%
-writecell(shiftdim(struct2cell(analysis_unstacked),2),'export_all_lines.csv','FileType','text','Delimiter',';')
+
+writecell(shiftdim(struct2cell(analysis_unstacked),2),[path '\export_all_lines.csv'],'FileType','text','Delimiter',';','WriteMode','Append');
 %%
 cellc=struct2cell(analysis_unstacked)
 %cellc=struct2cell(analysis)
