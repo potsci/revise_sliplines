@@ -50,12 +50,11 @@ selection=values(strcmp(folders{i},values.folder),:);
 %%
 excels=dir([folders{1} '\\*.xlsx'])
 o=1
-while contains(excels(o).name,'reanalyse') %this basically finds the first excel which does not contain reanalyse, i deleted the other wrong ones manually
-    eulers=readtable(excels(o))
+while contains(excels(o).nam,'reanalyse')
+    
     o=o+1
 end
 %%
-eulers=readtable([folders{i} '\\' excels(o).name])
 % eulers=readtable([folders{i}Analyse_Indents1.xlsx')
 imgs=eulers.Var1;
 eulers1=eulers.Var3;
@@ -191,7 +190,7 @@ end
         % check whether some lines need to be delect
 %         Continue=input('\nContinue?y/n: ','s');
 %         if strcmp(Continue,'y')
-            export_fig(fullfile([folders{i} '\' u_imgs{j} '_reanalyse.png']),'-r100')
+            export_fig(fullfile([folders{i} '\' u_imgs{j} '_reanalyse.png']),'-r200')
 %             close 
 %         end
     %% statistics

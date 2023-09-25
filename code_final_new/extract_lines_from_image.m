@@ -1,4 +1,5 @@
-% path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
+
+path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
 %%
@@ -183,18 +184,18 @@ end
 
 writecell(shiftdim(struct2cell(analysis_unstacked),2),[path '\export_all_lines.csv'],'FileType','text','Delimiter',';','WriteMode','Append');
 %%
-cellc=struct2cell(analysis_unstacked)
+% cellc=struct2cell(analysis_unstacked)
 %cellc=struct2cell(analysis)
 %%
- d = reshape(cellc,2404,6,1)
- %%
- d=permute(cellc, [2404,6])
- %%
-d=cellfun(@transpose,cellc,'UniformOutput',false)
-% analysis.all_lines
-
-%%
-d=shiftdim(cellc,2)
+%  d = reshape(cellc,2404,6,1)
+%  %%
+%  d=permute(cellc, [2404,6])
+%  %%
+% d=cellfun(@transpose,cellc,'UniformOutput',false)
+% % analysis.all_lines
+% 
+% %%
+% d=shiftdim(cellc,2)
 
     %%
 function y=uneven(x)
