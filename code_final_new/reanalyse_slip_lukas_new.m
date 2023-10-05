@@ -83,7 +83,7 @@ end
 %         SE_marked=imread([selection.folder{1},'\' selection.file{1}, '_extract_lines.png']);
         % input the euler angle
 %         T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
-        oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,joined_tab.eulers3(1)*degree,cs);
+        oriI=orientation('Euler',euler_t.eulers1(j)*degree,euler_t.eulers2(j)*degree,euler_t.eulers3(j)*degree,cs);
 %          oriI=Rot*oriI; % i think we can drop this, as the eulers are
 %         saved after this step
         % loade SEM for the first time

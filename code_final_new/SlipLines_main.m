@@ -70,7 +70,7 @@ Len =200; % the length of the theorectical lines in the right conner
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM
 % Rot=rotation.byAxisAngle(xvector,180*degree); % HKL
 %% Mode selection and orientation selection or input
-Mode= input('\n please select the mode (1 EBSD, 2 single, 3 Random with SF, 4 Random): ');
+Mode= input('\n please select the mode (1 EBSD, 2 single, 3 Random with SF, 4 Random');
 switch Mode
     case 1
         % alignment
@@ -109,6 +109,7 @@ switch Mode
             write_random(slip_name,frequency,fraction)
             fprintf('\nDone :)\n')
             return
+  
 end
 %% A different impression with same alignment
 Rep='y';
