@@ -106,7 +106,7 @@ for i=1:s_path(1)
           img_ind=img_ind(ass_temp~=0);
            %%
         output_file='reanalyse_slip_automatic';
-        write_statistic([pathlist(i).folder],selection.image_index(1),j,output_file,[oriI.phi1/degree,...
+        write_statistic([pathlist(i).folder],selectio,j,output_file,[oriI.phi1/degree,...
                 oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
     end
 end
