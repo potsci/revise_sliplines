@@ -12,7 +12,7 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,num_slipsy
         minAn(i,1)=180;
          xy = [line2(i).point1; line2(i).point2];
 %          show the mark line
-%          hold on
+         hold on
           plot(xy(:,1),xy(:,2),'--','LineWidth',2,'color','k');
           text(xy(1,1),xy(1,2),['Line' num2str(i)],'FontSize',12);
          % get the vector of the marked lines
@@ -22,7 +22,7 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,num_slipsy
          % theoretical lines
          for j=1:size(hSSt,2)
              An=angle(v,hSSt{j})/degree;
-             Anmin=min(An);
+             [Anmin,an_ind]=min(An);
              sel=hSS{j};
              slip_sys_cur=sel(an_ind);
              slip_sys_cur.antipodal=1;

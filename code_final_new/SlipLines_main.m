@@ -163,19 +163,20 @@ while (strcmp(Rep,'y'))
                 pause(0.05)
             end
     %% calculate the theoretical slip traces   
+        hSS={};
        for m=1:size(h,2)
             th=symmetrise(h(m)); % symmetrise the plane
-            hSS=normalize(oriI*th); % convert to the specimen symmetery
-            if hSS==vector3d.Z | hSS==-vector3d.Z
+            hSS{m}=normalize(oriI*th); % convert to the specimen symmetery
+            if hSS{m}==vector3d.Z | hSS{m}==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
             else
-                hSSt{m}=normalize(cross(hSS,vector3d.Z)); % traces on the observing plane
+                hSSt{m}=normalize(cross(hSS{m},vector3d.Z)); % traces on the observing plane
                 hSSt{m}.antipodal=1;
             end
         end
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
-          [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,col,TA,size(h,2));
+          [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,hSS,col,TA,size(h,2));
           %
            
 % %      %%
