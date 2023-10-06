@@ -34,7 +34,7 @@ folders=unique(values.folder)
 %%
 % folders(1)
 % folders{1}
-selection=values(strcmp(folders{1},values.folder),:)
+% selection=values(strcmp(folders{1},values.folder),:)
 %% if you want to restart from the beginning run this line again.
 % if not just run the loop again and the skript will start from the last
 % image you used (if I did get it right)
@@ -61,6 +61,10 @@ imgs=eulers.Var1;
 eulers1=eulers.Var3;
 eulers2=eulers.Var4;
 eulers3=eulers.Var5;
+%  imgs=eulers.image_index;
+%  eulers1=eulers.phi1;
+%  eulers2=eulers.Phi;
+%  eulers3=eulers.phi2;
 [u_imgs,index,~]=unique(imgs);
 eulers1=eulers1(index);
 eulers2=eulers2(index);
@@ -83,7 +87,7 @@ end
 %         SE_marked=imread([selection.folder{1},'\' selection.file{1}, '_extract_lines.png']);
         % input the euler angle
 %         T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
-        oriI=orientation('Euler',euler_t.eulers1(j)*degree,euler_t.eulers2(j)*degree,euler_t.eulers3(j)*degree,cs);
+                 oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,selection.eulers3(1)*degree,cs);
 %          oriI=Rot*oriI; % i think we can drop this, as the eulers are
 %         saved after this step
         % loade SEM for the first time
@@ -146,19 +150,20 @@ end
 %        imshow(SE_marked,'Border','tight')
 %        title('extracted_line_image')
     %% calculate the theoretical slip traces   
+        hSS={};
         for m=1:size(h,2)
             th=symmetrise(h(m)); % symmetrise the plane
-            hSS=normalize(oriI*th); % convert to the specimen symmetery
-            if hSS==vector3d.Z | hSS==-vector3d.Z
+            hSS{m}=normalize(oriI*th); % convert to the specimen symmetery
+            if hSS{m}==vector3d.Z | hSS{m}==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
             else
-                hSSt{m}=normalize(cross(hSS,vector3d.Z)); % traces on the observing plane
+                hSSt{m}=normalize(cross(hSS{m},vector3d.Z)); % traces on the observing plane
                 hSSt{m}.antipodal=1;
             end
         end
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
-          [ASS,devang]=compareInrange(SE,line,hSSt,col,TA,size(h,2));
+          [ASS,devang]=compareInrange(SE,line,hSSt,hss,col,TA,size(h,2));
           %
            
 % %      %%
