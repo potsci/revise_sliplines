@@ -28,8 +28,8 @@ Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle
 
 
 
-% path='J:\Users\Berners_Lukas\von_Martina\testing_reanalysis'
-path='E:\RWTH_Aachen\Promo\von_Martina'
+path='J:\Users\Berners_Lukas\von_Martina\testing_reanalysis'
+% path='E:\RWTH_Aachen\Promo\von_Martina'
 file='reanalyse_slip.xlsx'
 % [file,path] = uigetfile('.xlsx','old analysis file');
 %%
@@ -48,7 +48,7 @@ pathlist
 % [unique_lines,index,~]=unique(output_old.comb_index);
 %%
 % output_old_unique=output_old(index,:)
-% s_path=size(pathlist)
+s_path=size(pathlist)
 
 %%
 
@@ -65,7 +65,7 @@ for i=1:s_path(1)
         [unique_lines,index,~]=unique(selection.index);
         for l=1:numel(unique_lines)
             line(l).point1=[selection.point1_x(index(l)) selection.point1_y(index(l))];
-            line(l).point2=[selection.point2_x(index(l)) selection.point2_y(index(l))];
+            line(l).point2=[selection.point2_y(index(l)) selection.point2_y_1(index(l))];
         end
           hSS={};
           for m=1:size(h,2)

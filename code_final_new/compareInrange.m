@@ -2,7 +2,7 @@
 % the theoretical slip traces. When the minimum angle is smaller than the 
 % given threshold angle, the active slip system will be determined and
 % marked with corresponding color.
-function [Ss,devang]=compareInrange(SEI,line2,hSSt,col,TA,num_slipsystem)
+function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,num_slipsystem)
     figure; 
     imshow(SEI,'Border','tight')
     Ss=zeros(size(line2,2),num_slipsystem); 
@@ -23,13 +23,17 @@ function [Ss,devang]=compareInrange(SEI,line2,hSSt,col,TA,num_slipsystem)
          for j=1:size(hSSt,2)
              An=angle(v,hSSt{j})/degree;
              Anmin=min(An);
-             
+             sel=hSS{j};
+             slip_sys_cur=sel(an_ind);
+             slip_sys_cur.antipodal=1;
+             surfang_min=90-angle(vector3d(0,0,1),slip_sys_cur)/degree;
              if Anmin<minAn(i,1)
                  minAn(i,1)=Anmin;
                  SsM(i,1)=j;
              end
              if Anmin<TA 
                  Ss(i,j)=j;
+                 surfang(i,j)=surfang_min;
                  devang(i,j)=Anmin;
              end 
          end

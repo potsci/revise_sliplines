@@ -175,7 +175,7 @@ while (strcmp(Rep,'y'))
         end
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
-          [ASS,devang]=compareInrange(SE,line2,hSSt,col,TA,size(h,2));
+          [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,col,TA,size(h,2));
           %
            
 % %      %%
@@ -186,21 +186,22 @@ while (strcmp(Rep,'y'))
           ass_temp=reshape(ass_d,[],1);
           devang_d=shiftdim(devang,1);
           devang_r=reshape(devang_d,[],1);
+          surfang_d=shiftdim(surfang,1);
+          surfang_r=reshape(surfang_d,[],1);
 %           [row,col]= find(ass_d~=0)
           ass_r=ass_temp(ass_temp~=0);
           devang_r=devang_r(ass_temp~=0);
           line_test=struct2cell(line2);
-           line_test=shiftdim(line_test,2);
-           line_test=repmat(line_test,1,1,size(slip_name,2));
-           line_test=shiftdim(line_test,2);
-           line_test=reshape(line_test,[],1,2);
-           line_test=line_test(ass_temp~=0,:,:);
-           img_ind=[1:(size(line2,2))]';
-           img_ind=repmat(img_ind,1,size(slip_name,2));
-           img_ind=shiftdim(img_ind,1);
-           img_ind=reshape(img_ind,[],1);
-           %%
-           img_ind=img_ind(ass_temp~=0);
+          line_test=shiftdim(line_test,2);
+          line_test=repmat(line_test,1,1,size(slip_name,2));
+          line_test=shiftdim(line_test,2);
+          line_test=reshape(line_test,[],1,2);
+          line_test=line_test(ass_temp~=0,:,:);
+          img_ind=[1:(size(line2,2))]';
+          img_ind=repmat(img_ind,1,size(slip_name,2));
+          img_ind=shiftdim(img_ind,1);
+          img_ind=reshape(img_ind,[],1);
+          img_ind=img_ind(ass_temp~=0);
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export
@@ -219,7 +220,7 @@ while (strcmp(Rep,'y'))
 %         assignin('caller',slip_name(n),[]);
 %     end
     write_statistic_old([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
-            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,line_test,img_ind);
+            oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
     Rep=input('\ncontinue to analyze new with same Alignment:','s');
     if strcmp(Rep,'y')
         Rep_counts=Rep_counts+1;
