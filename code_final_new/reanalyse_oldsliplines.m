@@ -33,7 +33,7 @@ path='J:\Users\Berners_Lukas\von_Martina\testing_reanalysis'
 file='reanalyse_slip.xlsx'
 % [file,path] = uigetfile('.xlsx','old analysis file');
 %%
-pathlist=dir([path '\**\reanalyse_slip*.xlsx'])
+pathlist=dir([path '\**\reanalyse_slip*.csv'])
 pathlist
 %%
 
