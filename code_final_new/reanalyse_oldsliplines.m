@@ -1,6 +1,6 @@
 %% start mtex
-addpath 'C:\Users\freund\Desktop\SlipLinesLukasCode\code_final_new_lukas\mtex-5.3.1'
-startup_mtex
+% addpath 'C:\Users\freund\Desktop\SlipLinesLukasCode\code_final_new_lukas\mtex-5.3.1'
+% startup_mtex
 %%
 % startTools(); % replace the path in startTools storing MTEX
 % options
@@ -32,13 +32,13 @@ Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle
 %%
 
 
-% path='C:\Users\freund\Desktop\SlipLinesLukasCode'
-path='E:\RWTH_Aachen\Promo\von_Martina'
-path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\'
+% path='C:\Users\freund\Desktop\SlipLinesLukasCode\Neuer Ordner'
+% path='E:\RWTH_Aachen\Promo\von_Martina\'
+path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\test_subfolders'
 file='reanalyse_slip.xlsx'
 % [file,path] = uigetfile('.xlsx','old analysis file');
 %%
-pathlist=dir([path '**\reanalyse_slip*.csv'])
+pathlist=dir([path '\**\reanalyse_slip.csv'])
 time_stamp=datestr(now,'yyyy_mm_dd_HH_MM_SS')
 %%
 %%
@@ -116,8 +116,18 @@ for i=1:s_path(1)
         if not(isfolder(savepath))
             mkdir(savepath)
         end
-%         mkdir(savepath)
+        %%
+        output_folder=regexp(output_file,'.*(?=\\)','match');
+%         isfolder([savepath ,output_folder{1}])
+        %%
+        if not(isempty(output_folder))
+            if not(isfolder([savepath ,output_folder{1}]))
+             disp('making new directory')
+             mkdir([savepath ,output_folder{1}])
+            end
+        end
         write_statistic([savepath],selection.image_index(1),j,output_file,[oriI.phi1/degree,...
                 oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
+        end
     end
-end
+
