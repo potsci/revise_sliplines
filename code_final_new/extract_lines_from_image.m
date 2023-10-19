@@ -1,5 +1,5 @@
 
-path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
+path='C:\Users\freund\Desktop\Stoichiometric\Analysis_0x0x714x551'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
 %%
@@ -41,7 +41,7 @@ img_sum=img1+img2+img3;
 %%
 imsize=size(img_sum);
 %%
-slicing=uint32([0.2*imsize(2)-100,0.2*imsize(2)+100,0.8*imsize(2)-100,0.8*imsize(2)+100]);
+slicing=uint32([0.2*imsize(2)-120,0.2*imsize(2)+120,0.8*imsize(2)-120,0.8*imsize(2)+120]);
 img_sum(slicing(1):slicing(2),slicing(3):slicing(4))=0;
 img_bin=img_sum>0;
 
@@ -56,7 +56,7 @@ img_bin=img_sum>0;
 %% I think we go with a labeling before, to find only one line
 props=regionprops(img_bin,'Image','BoundingBox');
 %%
-prop_img=props(1).Image;
+% prop_img=props(p).Image;
 % figure
 % imshow(props(1).Image
 % figure

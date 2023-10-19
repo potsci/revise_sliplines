@@ -160,6 +160,8 @@ end
             if hSS{m}==vector3d.Z | hSS{m}==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
             else
+                for h_ind=1:numel(hSS{m}):
+                    if 
                 hSSt{m}=normalize(cross(hSS{m},vector3d.Z)); % traces on the observing plane
                 hSSt{m}.antipodal=1;
                 
@@ -188,12 +190,12 @@ end
           surfang_r=surfang_r(ass_temp~=0);        
           line_test=struct2cell(line);
            line_test=shiftdim(line_test,2);
-           line_test=repmat(line_test,1,5,size(slip_name,2));
+           line_test=repmat(line_test,1,1,size(slip_name,2));
            line_test=shiftdim(line_test,2);
            line_test=reshape(line_test,[],1,2);
            line_test=line_test(ass_temp~=0,:,:);
            img_ind=[1:(size(line,2))]';
-           img_ind=repmat(img_ind,1,5,size(slip_name,2));
+           img_ind=repmat(img_ind,1,size(slip_name,2));
            img_ind=shiftdim(img_ind,1);
            img_ind=reshape(img_ind,[],1);
            %%
