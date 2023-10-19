@@ -22,19 +22,29 @@ function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_s
          % theoretical lines
          for j=1:size(hSSt,2)
              An=angle(v,hSSt{j})/degree;
-             [Anmin,an_ind]=min(An);
+             An=angle(v,hSSt{j})/degree;
+             An=round(An,4);
+             [An_un,an_un_ind]=unique(An);
+             min_ind=An_un<TA;
+             an_ind=an_un_ind(min_ind);
+             Anmin=An(an_ind)
              sel=hSS{j};
              slip_sys_cur=sel(an_ind);
              slip_sys_cur.antipodal=1;
              surfang_min=90-angle(vector3d(0,0,1),slip_sys_cur)/degree;
              if Anmin<minAn(i,1)
-                 minAn(i,1)=Anmin;           
+                 minAn(i,1)=min(Anmin);           
                  SsM(i,1)=j;
              end
-             if Anmin<TA &&surfang_min>TAS
-                 Ss(i,j)=j;
-                 surfang(i,j)=surfang_min;
-                 devang(i,j)=Anmin;
+             s_A=size(Anmin)
+             for k=1:s_A(2)
+             if ~isempty(Anmin)
+                 if surfang_min(k)>TAS
+                 Ss(i,j,k)=j;
+                 surfang(i,j,k)=surfang_min(k);
+                 devang(i,j,k)=Anmin(k);
+                 end
+             end 
              end
 
          end

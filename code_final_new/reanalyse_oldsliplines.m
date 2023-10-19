@@ -1,5 +1,5 @@
 %% start mtex
-addpath 'C:\Users\freund\Desktop\SlipLinesLukasCode\code_final_new_lukas\mtex-5.3.1'
+% addpath 'C:\Users\freund\Desktop\SlipLinesLukasCode\code_final_new_lukas\mtex-5.3.1'
 % startup_mtex
 %%
 % startTools(); % replace the path in startTools storing MTEX
@@ -93,23 +93,24 @@ for i=1:s_path(1)
           ass_temp=reshape(ass_d,[],1);
           devang_d=shiftdim(devang,1);
           devang_r=reshape(devang_d,[],1);
-          surfang_d=shiftdim(surfang,1);
-          surfang_r=reshape(surfang_d,[],1);
+%           [row,col]= find(ass_d~=0)
           ass_r=ass_temp(ass_temp~=0);
           devang_r=devang_r(ass_temp~=0);
-          surfang_r=surfang_r(ass_temp~=0);
+          surfang_d=shiftdim(surfang,1);
+          surfang_r=reshape(surfang_d,[],1);
+          surfang_r=surfang_r(ass_temp~=0);        
           line_test=struct2cell(line);
-          line_test=shiftdim(line_test,2);
-          line_test=repmat(line_test,1,1,size(slip_name,2));
-          line_test=shiftdim(line_test,2);
-          line_test=reshape(line_test,[],1,2);
-          %%
-          line_test=line_test(ass_temp~=0,:,:);
-          img_ind=[1:(size(line,2))]';
-          img_ind=repmat(img_ind,1,size(slip_name,2));
-          img_ind=shiftdim(img_ind,1);
-          img_ind=reshape(img_ind,[],1);
-          img_ind=img_ind(ass_temp~=0);
+           line_test=shiftdim(line_test,2);
+           line_test=repmat(line_test,1,5,size(slip_name,2));
+           line_test=shiftdim(line_test,2);
+           line_test=reshape(line_test,[],1,2);
+           line_test=line_test(ass_temp~=0,:,:);
+           img_ind=[1:(size(line,2))]';
+           img_ind=repmat(img_ind,1,5,size(slip_name,2));
+           img_ind=shiftdim(img_ind,1);
+           img_ind=reshape(img_ind,[],1);
+           %%
+           img_ind=img_ind(ass_temp~=0);
            %%
         output_file=sprintf('%s_reanalyse_slip_automatic',pathlist(i).folder(numel(path)+1:end));
         savepath=[path, '\','reanalyse_auto_',time_stamp,'\'];
