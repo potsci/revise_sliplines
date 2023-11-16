@@ -66,6 +66,7 @@ slip_name = ["111","100","110","112"];
 col=['r','b','g','y']; % define color for each slip system
 TA=5; % threshold angle fore slip system determination
 Len =200; % the length of the theorectical lines in the right conner
+TAS=0; % threshold angle for slip systems between sample and surface, leave 0 if you want to account for all slip lines
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM
 % Rot=rotation.byAxisAngle(xvector,180*degree); % HKL
@@ -114,10 +115,13 @@ end
 %% A different impression with same alignment
 Rep='y';
 Rep_counts=1;
+%%
 while (strcmp(Rep,'y'))
     %% select grain/orientation and upload the corresponding SE/AFM
         % rotation if re-aligned
+    reselect=input('\nDo you want to get a new orientation?? y/n: ','s');
         if Mode==1
+
             % selected interested grains
             oriI=GrainSelect(ebsdI,grainsI);
             [file,path] = uigetfile('.tif','Analyzing SE Image');
@@ -135,7 +139,7 @@ while (strcmp(Rep,'y'))
             oriI=Rot*oriI;
             % loade SEM for the first time
             if Rep_counts==1
-                [file,path] = uigetfile('.tif','Analyzing SE Image');
+                [file,path] = uigetfile('.tif','Analyzing SE Image','Border','tight');
                 SE=imread([path,file]);
                 SE=SE(:,:,1:3);
                 % ceat an Analysis folder
@@ -162,6 +166,9 @@ while (strcmp(Rep,'y'))
                 i=i+1;
                 pause(0.05)
             end
+            if size(line2(end).point2)<2
+                line2=line2(1:end-1)
+            end
     %% calculate the theoretical slip traces   
         hSS={};
        for m=1:size(h,2)
@@ -176,50 +183,32 @@ while (strcmp(Rep,'y'))
         end
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
-          [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,hSS,col,TA,size(h,2));
+          [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,hSS,col,TA,TAS,size(h,2));
           %
            
 % %      %%
 %           line_t=table(horzcat(line.point1),horzcat(line.point2))
           %% A lot of unnecessary reshaping of the arrays
-          
-          ass_d=shiftdim(ASS,1);
-          ass_temp=reshape(ass_d,[],1);
-          devang_d=shiftdim(devang,1);
-          devang_r=reshape(devang_d,[],1);
-          surfang_d=shiftdim(surfang,1);
-          surfang_r=reshape(surfang_d,[],1);
-%           [row,col]= find(ass_d~=0)
-          ass_r=ass_temp(ass_temp~=0);
-          devang_r=devang_r(ass_temp~=0);
-          line_test=struct2cell(line2);
-          line_test=shiftdim(line_test,2);
-          line_test=repmat(line_test,1,1,size(slip_name,2));
-          line_test=shiftdim(line_test,2);
-          line_test=reshape(line_test,[],1,2);
-          line_test=line_test(ass_temp~=0,:,:);
-          img_ind=[1:(size(line2,2))]';
-          img_ind=repmat(img_ind,1,size(slip_name,2));
-          img_ind=shiftdim(img_ind,1);
-          img_ind=reshape(img_ind,[],1);
-          img_ind=img_ind(ass_temp~=0);
+      [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,surfang,line2,slip_name)
+
     %% quiver the theorectical traces
-        quTSL(SE,hSSt,Len,col);
+    quTSL(SE,hSSt,Len,col);
     %% plot and export
-        fprintf ('\nDelete lines.')
+    fprintf ('\nDelete lines.')
         % check whether some lines need to be delect
-        Continue=input('\nContinue?y/n: ','s');
-        if strcmp(Continue,'y')
-            export_fig(fullfile([path1 '\' file(1:end-4) '_' num2str(Rep_counts)]),'-r100')
-            close 
-        end
+%         Continue=input('\nDo you want to save the image??y/n: ','s');
+    if strcmp(Continue,'y')
+        export_fig(fullfile([path1 '\' file(1:end-4) '_' num2str(Rep_counts)]),'-r100')
+        close 
+    end
     %% statistics
     if Rep_counts==1
-    output_file=input('\nplease input the document name of the out put file: ','s');
+    output_file=input('\nplease input the document name of the out put file: ',"s");
     end
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
 %     end
+%%
     write_statistic_old([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
             oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
     Rep=input('\ncontinue to analyze new with same Alignment:','s');

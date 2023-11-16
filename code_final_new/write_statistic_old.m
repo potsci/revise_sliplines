@@ -14,6 +14,8 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
     output_old = readtable([subfolder,'\' output_file,'.xlsx'],'Sheet',1);
 %%
     size_old=size(output_old,1);
+    file=convertCharsToStrings(file)
+%%
     image_index=repmat([file],size(Ss,1),1);
 %     image_index=repmat([file(1:end-4) '_' num2str(Rep_counts)],size(Ss,1),1);
     for i=1:numel(Ss)
@@ -25,8 +27,8 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
     Phi = repmat(T(2),size(Ss,1),1);
     phi2 = repmat(T(3),size(Ss,1),1);
 %     slip
-p1=vertcat(line2{:,:,1});
-p2=vertcat(line2{:,:,2});
+    p1=vertcat(line2{:,:,1});
+    p2=vertcat(line2{:,:,2});
     output_current=table(image_index,index, phi1, Phi, phi2, Ss,slip_name_out,devang,surfang,p1(:,1),p1(:,2),p2(:,1),p2(:,2));
 %%
     writetable(output_current,[subfolder,'\',output_file, '.xlsx'],'Sheet',1,...
