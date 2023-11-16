@@ -4,7 +4,7 @@ function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,de
 % function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,devang,line2)
     if ~isfile([subfolder, output_file, '.xlsx'])
         %%
-        headline=["image_index","index", "phi1", 'Phi', 'phi2','slip_sys_no','slip_name','devang','point1_x','point1_x','point2_x','point2_y'];
+        headline=["image_index","index", "phi1", 'Phi', 'phi2','slip_sys_no','slip_name','devang','point1_x','point1_y','point2_x','point2_y'];
         writematrix(headline,[subfolder, output_file, '.xlsx'],'Sheet',1,'Range','A1');
          writematrix(headline,[subfolder, output_file, '.csv'],'Delimiter',';');
     end

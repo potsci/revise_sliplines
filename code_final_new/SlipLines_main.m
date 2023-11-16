@@ -120,8 +120,9 @@ while (strcmp(Rep,'y'))
     %% select grain/orientation and upload the corresponding SE/AFM
         % rotation if re-aligned
     reselect=input('\nDo you want to get a new orientation?? y/n: ','s');
-        if Mode==1
-
+    if strcmp(reselect,'y')
+          if Mode==1
+      
             % selected interested grains
             oriI=GrainSelect(ebsdI,grainsI);
             [file,path] = uigetfile('.tif','Analyzing SE Image');
@@ -149,6 +150,7 @@ while (strcmp(Rep,'y'))
                 end
             end
         end
+    end
 
     %% Mark the slip traces
        fi=figure;imshow(SE);axis equal
