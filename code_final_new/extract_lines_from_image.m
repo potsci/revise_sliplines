@@ -1,6 +1,6 @@
 %% setupt the file path and configure parameters
 path='C:\Users\freund\Desktop\Stoichiometric\Analysis_0x0x714x551'
-path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\Area1_Indents1'
+path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines'
 export='n'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
