@@ -59,16 +59,18 @@ while contains(excels(o).name,'reanalyse') %this basically finds the first excel
 end
 %%
 eulers=readtable([folders{i} '\\' excels(o).name])
-if Exist_Column = strcmp('image_index',eulers.Properties.VariableNames)
+if sum(strcmp('image_index',eulers.Properties.VariableNames))==0
 % eulers=readtable([folders{i}Analyse_Indents1.xlsx')
-% imgs=eulers.Var1;
-% eulers1=eulers.Var3;
-% eulers2=eulers.Var4;
-% eulers3=eulers.Var5;
+    imgs=eulers.Var1;
+    eulers1=eulers.Var3;
+    eulers2=eulers.Var4;
+    eulers3=eulers.Var5;
+else
  imgs=eulers.image_index;
  eulers1=eulers.phi1;
  eulers2=eulers.Phi;
  eulers3=eulers.phi2;
+end
 [u_imgs,index,~]=unique(imgs);
 eulers1=eulers1(index);
 eulers2=eulers2(index);
@@ -172,33 +174,33 @@ end
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang,surfang]=compareInrange(SE,line,hSSt,hSS,col,TA,TA_surface,size(h,2));  
           %
-           
+         [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,surfang,line,slip_name)
 % %      %%
 %           line_t=table(horzcat(line.point1),horzcat(line.point2))
           %% A lot of unnecessary reshaping of the arrays
           
-          ass_d=shiftdim(ASS,1);
-          ass_temp=reshape(ass_d,[],1);
-          devang_d=shiftdim(devang,1);
-          devang_r=reshape(devang_d,[],1);
+%           ass_d=shiftdim(ASS,1);
+%           ass_temp=reshape(ass_d,[],1);
+%           devang_d=shiftdim(devang,1);
+%           devang_r=reshape(devang_d,[],1);
 %           [row,col]= find(ass_d~=0)
-          ass_r=ass_temp(ass_temp~=0);
-          devang_r=devang_r(ass_temp~=0);
-          surfang_d=shiftdim(surfang,1);
-          surfang_r=reshape(surfang_d,[],1);
-          surfang_r=surfang_r(ass_temp~=0);        
-          line_test=struct2cell(line);
-           line_test=shiftdim(line_test,2);
-           line_test=repmat(line_test,1,5,size(slip_name,2));
-           line_test=shiftdim(line_test,2);
-           line_test=reshape(line_test,[],1,2);
-           line_test=line_test(ass_temp~=0,:,:);
-           img_ind=[1:(size(line,2))]';
-           img_ind=repmat(img_ind,1,5,size(slip_name,2));
-           img_ind=shiftdim(img_ind,1);
-           img_ind=reshape(img_ind,[],1);
-           %%
-           img_ind=img_ind(ass_temp~=0);
+%           ass_r=ass_temp(ass_temp~=0);
+%           devang_r=devang_r(ass_temp~=0);
+%           surfang_d=shiftdim(surfang,1);
+%           surfang_r=reshape(surfang_d,[],1);
+%           surfang_r=surfang_r(ass_temp~=0);        
+%           line_test=struct2cell(line);
+%            line_test=shiftdim(line_test,2);
+%            line_test=repmat(line_test,1,5,size(slip_name,2));
+%            line_test=shiftdim(line_test,2);
+%            line_test=reshape(line_test,[],1,2);
+%            line_test=line_test(ass_temp~=0,:,:);
+%            img_ind=[1:(size(line,2))]';
+%            img_ind=repmat(img_ind,1,5,size(slip_name,2));
+%            img_ind=shiftdim(img_ind,1);
+%            img_ind=reshape(img_ind,[],1);
+%            %
+%            img_ind=img_ind(ass_temp~=0);
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export

@@ -24,13 +24,13 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,TAS,num_sl
          % calculate the minimum angle betwwen the marked lines and the
          % theoretical lines
          for j=1:size(hSSt,2)
-             disp(j)
+%              disp(j)
              An=angle(v,hSSt{j})/degree;
              An=round(An,4);
              [An_un,an_un_ind]=unique(An);
              min_ind=An_un<TA;
              an_ind=an_un_ind(min_ind);
-             Anmin=An(an_ind)
+             Anmin=An(an_ind);
              sel=hSS{j};
              slip_sys_cur=sel(an_ind);
              slip_sys_cur.antipodal=1;
@@ -39,7 +39,7 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,TAS,num_sl
                  minAn(i,1)=min(Anmin);
                  SsM(i,1)=j;
              end
-             s_A=size(Anmin)
+             s_A=size(Anmin);
              for k=1:s_A(2)
              if ~isempty(Anmin)
                  if surfang_min(k)>TAS

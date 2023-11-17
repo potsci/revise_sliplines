@@ -41,9 +41,9 @@ folders=unique(values.folder)
 %% if you want to restart from the beginning run this line again.
 % if not just run the loop again and the skript will start from the last
 % image you used (if I did get it right)
-control_i=1
-check_error=0
-control_j=1
+control_i=1;
+check_error=0;
+control_j=1;
 %%
 
 for i=control_i:numel(folders)
@@ -51,14 +51,14 @@ for i=control_i:numel(folders)
 selection=values(strcmp(folders{i},values.folder),:);
 % euler_t=table(u_imgs,eulers1,eulers2,eulers3);
 %%
-excels=dir([folders{i} '\\*.xlsx'])
-o=1
+excels=dir([folders{i} '\\*.xlsx']);
+o=1;
 while contains(excels(o).name,'reanalyse') %this basically finds the first excel which does not contain reanalyse, i deleted the other wrong ones manually
-    eulers=readtable(excels(o))
-    o=o+1
+    eulers=readtable(excels(o));
+    o=o+1;
 end
 %%
-eulers=readtable([folders{i} '\\' excels(o).name])
+eulers=readtable([folders{i} '\\' excels(o).name]);
 if sum(strcmp('image_index',eulers.Properties.VariableNames))==0
 % eulers=readtable([folders{i}Analyse_Indents1.xlsx')
     imgs=eulers.Var1;
@@ -80,13 +80,13 @@ euler_t=table(u_imgs,eulers1,eulers2,eulers3);
 joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 %%
 if check_error==1
-control_j=1
+control_j=1;
 end
     for j=control_j:numel(u_imgs)
-        check_error=0
+        check_error=0;
         
         %%
-        selection=joined_tab(strcmp(u_imgs(j),joined_tab.file),:)
+        selection=joined_tab(strcmp(u_imgs(j),joined_tab.file),:);
       
 %%      %%
         SE=imread([selection.folder{1},'\' selection.file{1}, '.png']);
@@ -116,7 +116,7 @@ end
        title('extracted line image, check for missing ones')
        for k=1:size(selection,1)
            hold on
-           disp(k)
+%            disp(k)
            plot([selection.point1_x(k) selection.point2_x(k)],[selection.point1_y(k) selection.point2_y(k)],':','color','black','linewidth',2)
        end
        
@@ -126,12 +126,12 @@ end
 %        title("original image for comparison")
 %        axis equal
 %             line2=[];
-            line=[]
+            line=[];
 
             for n=1:size(selection,1)
                 
-            line(n).point1=[selection.point1_x(n) selection.point1_y(n)]
-            line(n).point2=[selection.point2_x(n) selection.point2_y(n)]
+            line(n).point1=[selection.point1_x(n) selection.point1_y(n)];
+            line(n).point2=[selection.point2_x(n) selection.point2_y(n)];
 %             n=size(selection,1);
             end
 
@@ -174,33 +174,10 @@ end
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang,surfang]=compareInrange(SE,line,hSSt,hSS,col,TA,TA_surface,size(h,2));  
           %
-           
+         [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,surfang,line,slip_name);
 % %      %%
 %           line_t=table(horzcat(line.point1),horzcat(line.point2))
-          %% A lot of unnecessary reshaping of the arrays
-          
-          ass_d=shiftdim(ASS,1);
-          ass_temp=reshape(ass_d,[],1);
-          devang_d=shiftdim(devang,1);
-          devang_r=reshape(devang_d,[],1);
-%           [row,col]= find(ass_d~=0)
-          ass_r=ass_temp(ass_temp~=0);
-          devang_r=devang_r(ass_temp~=0);
-          surfang_d=shiftdim(surfang,1);
-          surfang_r=reshape(surfang_d,[],1);
-          surfang_r=surfang_r(ass_temp~=0);        
-          line_test=struct2cell(line);
-           line_test=shiftdim(line_test,2);
-           line_test=repmat(line_test,1,5,size(slip_name,2));
-           line_test=shiftdim(line_test,2);
-           line_test=reshape(line_test,[],1,2);
-           line_test=line_test(ass_temp~=0,:,:);
-           img_ind=[1:(size(line,2))]';
-           img_ind=repmat(img_ind,1,5,size(slip_name,2));
-           img_ind=shiftdim(img_ind,1);
-           img_ind=reshape(img_ind,[],1);
-           %%
-           img_ind=img_ind(ass_temp~=0);
+
     %% quiver the theorectical traces
         quTSL(SE,hSSt,Len,col);
     %% plot and export
@@ -213,7 +190,7 @@ end
 %         end
     %% statistics
 %     if Rep_counts==1
-    output_file='reanalyse_slip'
+    output_file='reanalyse_slip';
 %     end
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
@@ -225,8 +202,8 @@ end
 %         Rep_counts=Rep_counts+1;
 %     end
 %%
-control_j=control_j+1
-check_error=1
+control_j=control_j+1;
+check_error=1;
     end
-    control_i=control_i+1
+    control_i=control_i+1;
 end
