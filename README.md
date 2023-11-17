@@ -34,3 +34,5 @@ If you notice, that you select a wrong line, you could press ctrl + c . The scri
 
 ### reanalyse_oldsliplines
 ranalyse_oldsliplines is used to reanalyse the old analysis datasets if youd e.g. by TEM analysis detect a possible new candidate for slip line analysis
+
+**if you notice bugs, you are welcome to report.**
