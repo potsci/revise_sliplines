@@ -22,12 +22,15 @@ The new version of the code was developed using Matlab 2020b and Mtex-5.7.0
 - minor changes of plotting the images and selecting the points of the slip lines
 
 ## Added Scripts, to analyse old data again
+in the scripts you still need to define your crystalstrucutre and slip systems again!!!
+
 ### extract_lines_from_image 
 - can extract the already marked slip lines from older images based on color filtering and a following hough transform and writes the x-y coordinates to an excel file- 
 
-### reanalyse_oldsliplines
-ranalyse_oldsliplines is used to reanalyse the slip lines, where you allready have x and y coordinates of your slip lines. It gets the orientation (euler angles) from the old analysis excel file and lets you select the missing ones on the image
+### reanalyse_slip_lines_new
+this is used to reanalyse the slip lines, where you allready have x and y coordinates of your slip lines. It gets the orientation (euler angles) from the old analysis excel file and lets you select the missing ones on the image
 in the beginning you can select the folder name, where you have the .csv extracted by extract_lines_from_image (values = readtable(....)) and the path which contains your old analyses (containting the euler angles).
 If you notice, that you select a wrong line, you could press ctrl + c . The script will memorise the loop variables. if you start the script again from the for loop, you can continue withe last image again (if it not works correctly, please provide control_i, check_error and control_j, manually)
 
-### reanalyse_slip_lines_new
+### reanalyse_oldsliplines
+ranalyse_oldsliplines is used to reanalyse the old analysis datasets if youd e.g. by TEM analysis detect a possible new candidate for slip line analysis
