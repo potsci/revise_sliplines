@@ -1,7 +1,6 @@
-%% setupt the file path and configure parameters
+
 path='C:\Users\freund\Desktop\Stoichiometric\Analysis_0x0x714x551'
 path='J:\Users\Berners_Lukas\von_Martina\Outcome_SlipLines\Area1_Indents1'
-export='n'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
 %%
@@ -139,34 +138,34 @@ c=c+1;
 %     end
 %     end
 %%
-        if strcmp(export,'y')
-%             disp('stuff')
-            h=figure
-            imshow(img,'Border','tight'), hold on
-                %max_len = 0;
-            for k = 1:length(all_lines)
-               xy = [all_lines(k).point1; all_lines(k).point2];
-               plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
-        % 
-                    % Plot beginnings and ends of lines
-                plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
-                plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+        if strcmp('export','y')
+        disp('stuff')
+        h=figure
+        imshow(img,'Border','tight'), hold on
+            %max_len = 0;
+        for k = 1:length(all_lines)
+           xy = [all_lines(k).point1; all_lines(k).point2];
+           plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+    % 
+                % Plot beginnings and ends of lines
+            plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+            plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
 
-                    % %    % Determine the endpoints of the longest line segment
-                    % %         len = norm(all_lines(k).point1 - all_lines(k).point2);
-                    % %     if ( len > max_len)
-                    % %       max_len = len;
-                    % %       xy_long = xy;
-                    % %    end
-                    %     end
-                    % %     close all
-                    % % highlight the longest line segment
-                    % % plot(xy_long(:,1),xy_long(:,2),'LineWidth',2,'Color','red');
+    % %    % Determine the endpoints of the longest line segment
+    % %         len = norm(all_lines(k).point1 - all_lines(k).point2);
+    % %     if ( len > max_len)
+    % %       max_len = len;
+    % %       xy_long = xy;
+    % %    end
+    %     end
+    % %     close all
+    % % highlight the longest line segment
+    % % plot(xy_long(:,1),xy_long(:,2),'LineWidth',2,'Color','red');
 
-             end
-         exportgraphics(h,[file_list(p).folder ,'\' file_list(p).name(1:end-4) '_extract_lines.png'])
-         close all
-       end
+         end
+            exportgraphics(h,[file_list(p).folder ,'\' file_list(p).name(1:end-4) '_extract_lines.png'])
+            close all
+        end
     end
 end
 
