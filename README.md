@@ -20,3 +20,8 @@ The new version of the code was developed using Matlab 2020b and Mtex-5.7.0
 - saving of redundant slip systems (i.e if slip sys _a_ has a deviation angle of 3.0 but slip sys _b_ of 2.8, both are saved)
 - adding the angle with the surface so we could theoretically rule out the very flat ones
 - minor changes of plotting the images and selecting the points of the slip lines
+
+### Added Scripts, to analyse old data again
+- extract_lines_from_image can extract the already marked slip lines from older images based on color filtering and a following hough transform and writes the x-y coordinates to an excel file
+- reanalyse_slip_new contains the script to select the lines that have been missed by extract_lines_from_image
+- ranalyse_oldsliplines is used to reanalyse the slip lines, where you allready have x and y coordinates of your slip lines. It gets the orientation (euler angles) from the old analysis excel file.
