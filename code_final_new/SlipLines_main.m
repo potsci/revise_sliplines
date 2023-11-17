@@ -70,6 +70,17 @@ TAS=0; % threshold angle for slip systems between sample and surface, leave 0 if
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM
 % Rot=rotation.byAxisAngle(xvector,180*degree); % HKL
+output_num=2 %% the file name of the .xls is now automatically generated. Select the folder depth this generation is based on here
+manual_output_name='n'
+%% Setup of local path, to not newly select the input folder every time again 
+localpath = which("SlipLines_main.m")
+localpath=erase(localpath,"SlipLines_main.m")
+localpath=[localpath '\pathfiles\']
+localpath=fullfile(localpath)
+% disp(sprintf("Your script is located int : localpath")
+    
+
+
 %% Mode selection and orientation selection or input
 Mode= input('\n please select the mode (1 EBSD, 2 single, 3 Random with SF, 4 Random');
 switch Mode
@@ -124,11 +135,19 @@ while (strcmp(Rep,'y'))
       
             % selected interested grains
             reselect=input('\nDo you want to get a new orientation?? y/n: ','s');
-                if strcmp(reselect,'y')
-  end
+            if strcmp(reselect,'y')
+                oriI=GrainSelect(ebsdI,grainsI);
+            end
+%             [file,path] = uigetfile('.tif','Analyzing SE Image');
+            load([localpath,'SEname']) % the last saved path is saved to ebsdname.mat
+            [file,path] = uigetfile(SEname,'Reference SE Image (.tif)'); 
+            if path~=0
+                SEname=[path,file]
+                save([localpath, 'SEname.mat'],"SEname");    
+                clear SEname;
+            end
 
-            oriI=GrainSelect(ebsdI,grainsI);
-            [file,path] = uigetfile('.tif','Analyzing SE Image');
+
             SE=imread([path,'\',file]);
             %SE=SE(:,:);
             tformN=tform;
@@ -201,17 +220,30 @@ while (strcmp(Rep,'y'))
     fprintf ('\nDelete lines.')
         % check whether some lines need to be delect
 %         Continue=input('\nDo you want to save the image??y/n: ','s');
-    if strcmp(Continue,'y')
+%     if strcmp(Continue,'y')
         export_fig(fullfile([path1 '\' file(1:end-4) '_' num2str(Rep_counts)]),'-r100')
-        close 
-    end
+%         close 
+%     end
     %% statistics
     if Rep_counts==1
-    output_file=input('\nplease input the document name of the out put file: ',"s");
+        if strcmp(manual_output_name,'y')
+            output_num=input('\n Please select the name of the excel ouput file: ',"s");
+        else
+            output_file=[]
+            path_withouthspace=erase(path,' ')
+            sub_str_split=strsplit(path_withouthspace,'\')
+            for i=0:output_num
+                output_file=[(sub_str_split{end-i}),'_', output_file]
+            end
+            d=datetime('now')
+            d.Format = 'yyyy_MM_dd_HH_mm_ss'
+            output_file=[output_file, '_', char(d)]
+        end
     end
-%     for n=1:numel(slip_name)
-%         assignin('caller',slip_name(n),[]);
-%     end
+% % % % %     for n=1:numel(slip_name)
+% % % % %         assignin('caller',slip_name(n),[]);
+% % % % %     end
+
 %%
     write_statistic_old([path1 '\'],file,Rep_counts,output_file,[oriI.phi1/degree,...
             oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
