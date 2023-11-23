@@ -156,20 +156,30 @@ while (strcmp(Rep,'y'))
             tformN.T(3,:)=[0 0 1]; % remove the shifts and blowing up
             SE=imwarp(SE,tformN,'OutputView',imref2d(size(SE)));
         elseif Mode==2
-            % input the euler angle
-            T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
-            oriI=orientation('Euler',T(1)*degree,T(2)*degree,T(3)*degree,cs);
-            oriI=Rot*oriI;
+           if Rep_counts==1
+                T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
+                oriI=orientation('Euler',T(1)*degree,T(2)*degree,T(3)*degree,cs);
+                oriI=Rot*oriI;
+            end
             % loade SEM for the first time
+            %%
+            load([localpath,'SEname']) % the last saved path is saved to ebsdname.mat
+            [file,path] = uigetfile(SEname,'Reference SE Image (.tif)'); 
+            if path~=0
+                SEname=[path,file]
+                save([localpath, 'SEname.mat'],"SEname");    
+                clear SEname;
+            end
+            SE=imread([path,file]);
+          %%
+            SE=rgb2gray(SE)
+%             SE=SE(:,:);
+            % creat an Analysis folder
+            SubFolder = [path '\' 'Analysis'];
             if Rep_counts==1
-                [file,path] = uigetfile('.tif','Analyzing SE Image','Border','tight');
-                SE=imread([path,file]);
-                SE=SE(:,:,1:3);
-                % ceat an Analysis folder
-                SubFolder = [path '\' 'Analysis'];
-                if ~exist(SubFolder, 'dir')
-                         mkdir(SubFolder);
-                end
+              if ~exist(SubFolder, 'dir')
+                    mkdir(SubFolder);
+              end
             end
         end
   
@@ -199,6 +209,7 @@ while (strcmp(Rep,'y'))
             hSS{m}=normalize(oriI*th); % convert to the specimen symmetery
             if hSS{m}==vector3d.Z | hSS{m}==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
+                hSSt{m}=normalize(cross(hSS{m},vector3d(1,1,100)));
             else
                 hSSt{m}=normalize(cross(hSS{m},vector3d.Z)); % traces on the observing plane
                 hSSt{m}.antipodal=1;

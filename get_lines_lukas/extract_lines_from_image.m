@@ -1,4 +1,4 @@
-path='C:\\Promo\\von+Martina\\Outcome_SlipLines'
+path='C:\Users\freund\Desktop\2.C15_Offstoichiometrieprobe\SlipLineAnalyse_2.Offstoichiometry\LinksVonMakierung\Area2\C15_2\Analysis_0x0x352x263'
 %%
 file_list=dir(fullfile([path '\\**\\*.png']))
 %%

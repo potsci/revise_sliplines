@@ -4,7 +4,7 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
 % function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,devang,line2)
     if ~isfile([subfolder, '\', output_file, '.xlsx'])
         %%
-        headline=["image_index","index", "phi1", 'Phi', 'phi2','slip_sys_no','slip_name','devang','surfang','point1_x','point1_y','point2_y','point2_y'];
+        headline=["image_index","index", "phi1", 'Phi', 'phi2','slip_sys_no','slip_name','devang','surfang','point1_x','point1_y','point2_x','point2_y'];
         writematrix(headline,[subfolder,'\', output_file, '.xlsx'],'Sheet',1,'Range','A1');
          writematrix(headline,[subfolder,'\', output_file, '.csv'],'Delimiter',';');
     end
@@ -14,7 +14,7 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
     output_old = readtable([subfolder,'\' output_file,'.xlsx'],'Sheet',1);
 %%
     size_old=size(output_old,1);
-    file=convertCharsToStrings(file)
+    file=convertCharsToStrings([file(1:end-4), '_', num2str(Rep_counts) file(end-3:end)])
 %%
     image_index=repmat([file],size(Ss,1),1);
 %     image_index=repmat([file(1:end-4) '_' num2str(Rep_counts)],size(Ss,1),1);

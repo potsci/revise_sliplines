@@ -12,7 +12,7 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,TAS,num_sl
         %%
 %         i=7
         
-        minAn(i,1)=180;
+         minAn(i,1)=180;
          xy = [line2(i).point1; line2(i).point2];
 %          show the mark line
          hold on
