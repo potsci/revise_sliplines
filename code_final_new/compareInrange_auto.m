@@ -5,9 +5,9 @@
 function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_slipsystem,dupe)
 %     figure; 
 %     imshow(SEI,'Border','tight')
-    Ss=zeros(size(line2,2),num_slipsystem); 
-    devang=zeros(size(line2,2),num_slipsystem);
-    surfang=zeros(size(line2,2),num_slipsystem);
+    Ss=zeros(size(line2,2),num_slipsystem,5); 
+    devang=zeros(size(line2,2),num_slipsystem,5);
+    surfang=zeros(size(line2,2),num_slipsystem,5);
     for i=1:size(line2,2)
         minAn(i,1)=180;
          xy = [line2(i).point1; line2(i).point2];
