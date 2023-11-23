@@ -27,7 +27,7 @@ Len =200; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM
 % Rot=rotation.byAxisAngle(xvector,180*degree); % HKL
-
+dupe=0
 
 %%
 
@@ -69,11 +69,19 @@ for i=1:s_path(1)
         oriI=orientation('Euler',selection.phi1(1)*degree,selection.Phi(1)*degree,selection.phi2(1)*degree,cs);
         line=[];
         [unique_lines,index,~]=unique(selection.index);
-        for l=1:numel(unique_lines)
-            line(l).point1=[selection.point1_x(index(l)) selection.point1_y(index(l))];
-            line(l).point2=[selection.point2_x(index(l)) selection.point2_y_1(index(l))];
+        if isfield(selection,'point2_x')
+            for l=1:numel(unique_lines)
+                line(l).point1=[selection.point1_x(index(l)) selection.point1_y(index(l))];
+                line(l).point2=[selection.point2_x(index(l)) selection.point2_y(index(l))];
+            end
+        else
+            for l=1:numel(unique_lines)
+                line(l).point1=[selection.point1_x(index(l)) selection.point1_y(index(l))];
+                line(l).point2=[selection.point2_y(index(l)) selection.point2_y_1(index(l))];
+            end   
         end
           hSS={};
+          hSSt={};
           for m=1:size(h,2)
             th=symmetrise(h(m)); % symmetrise the plane
             hSS{m}=normalize(oriI*th); % convert to the specimen symmetery
@@ -85,7 +93,7 @@ for i=1:s_path(1)
             end
         end
     %% Compare deviation
-          [ASS,devang,surfang]=compareInrange_auto(line,hSSt,hSS,col,TA,TA_surface,size(h,2));  
+          [ASS,devang,surfang]=compareInrange_auto(line,hSSt,hSS,col,TA,TA_surface,size(h,2),dupe);  
           [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,surfang,line,slip_name);
 
            %%
@@ -104,7 +112,7 @@ for i=1:s_path(1)
              mkdir([savepath ,output_folder{1}])
             end
         end
-        write_statistic_old([savepath],selection.image_index(1),j,output_file,[oriI.phi1/degree,...
+        write_statistic_old_auto([savepath],selection.image_index(1),j,output_file,[oriI.phi1/degree,...
                 oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
         end
     end

@@ -2,7 +2,7 @@
 % the theoretical slip traces. When the minimum angle is smaller than the 
 % given threshold angle, the active slip system will be determined and
 % marked with corresponding color.
-function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_slipsystem)
+function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_slipsystem,dupe)
 %     figure; 
 %     imshow(SEI,'Border','tight')
     Ss=zeros(size(line2,2),num_slipsystem); 
@@ -22,12 +22,20 @@ function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_s
          % theoretical lines
          for j=1:size(hSSt,2)
              An=angle(v,hSSt{j})/degree;
-             An=angle(v,hSSt{j})/degree;
+%              An=angle(v,hSSt{j})/degree;
              An=round(An,4);
              [An_un,an_un_ind]=unique(An);
-             min_ind=An_un<TA;
+             if dupe==0
+                [min_un,min_min_ind] = min(An_un);
+                min_ind=An_un<TA;
+                min_ind(1:end ~= min_min_ind)=false;
+             else
+                min_ind=An_un<TA;
+             end
              an_ind=an_un_ind(min_ind);
-             Anmin=An(an_ind)
+             %%
+             Anmin=An(an_ind);
+             %%
              sel=hSS{j};
              slip_sys_cur=sel(an_ind);
              slip_sys_cur.antipodal=1;
@@ -36,7 +44,7 @@ function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_s
                  minAn(i,1)=min(Anmin);           
                  SsM(i,1)=j;
              end
-             s_A=size(Anmin)
+             s_A=size(Anmin);
              for k=1:s_A(2)
              if ~isempty(Anmin)
                  if surfang_min(k)>TAS
@@ -45,7 +53,9 @@ function [Ss,devang,surfang]=compareInrange_auto(line2,hSSt,hSS,col,TA,TAS,num_s
                  devang(i,j,k)=Anmin(k);
                  end
              end 
-             end
+         end
+             
+              
 
          end
          %% mark with the best matched line with corresponding color
