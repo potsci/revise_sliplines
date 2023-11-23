@@ -27,7 +27,8 @@ Len =200; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM
 % Rot=rotation.byAxisAngle(xvector,180*degree); % HKL
-dupe=0
+dupe=0 %% if dupe=0, it only counts the same slip system once. otherwise, it will count it multiple, times, if there are multiple ones, that have different angles)
+
 
 %%
 
