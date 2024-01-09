@@ -30,8 +30,7 @@ function [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,
     %%
     line_test_p1=line_test_p1(ass_temp~=0,:,:);
     line_test_p2=line_test_p2(ass_temp~=0,:,:);
-    %%
-    line_test=[line_test_p1,line_test_p2]
+    line_test=cell(line_test_p1,line_test_p2)
     %%
     
     img_ind=[1:(size(line2,2))]';

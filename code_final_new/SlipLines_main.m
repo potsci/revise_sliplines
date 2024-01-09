@@ -50,20 +50,20 @@ clear
 % define the crystal symmetry. Pay attention to the difference between HKL
 % and EDAX
 % % cs=loadCIF('Mg-Magnesium'); % directly read the CIF file
-% cs = crystalSymmetry('6/mmm', [3.2 3.2 5.2], 'X||a', 'Y||b*',...
-%     'Z||c', 'mineral', 'Magnesium', 'color', 'light blue'); % define the CS (Mg)
+cs = crystalSymmetry('6/mmm', [3.2 3.2 5.2], 'X||a', 'Y||b*',...
+    'Z||c', 'mineral', 'Magnesium', 'color', 'light blue'); % define the CS (Mg)
 % cs = crystalSymmetry('321', [5 5 27], 'X||a', 'Y||b*',...
 %     'Z||c', 'mineral', 'Co6Nb7', 'color', 'light blue'); % define the CS
-cs = crystalSymmetry('m-3m', [8.04 8.04 8.04], 'X||a', 'Y||b*','Z||c',...
-    'mineral', 'Al2Ca', 'color', 'light blue');
+% cs = crystalSymmetry('m-3m', [8.04 8.04 8.04], 'X||a', 'Y||b*','Z||c',...
+%     'mineral', 'Al2Ca', 'color', 'light blue');
 % define the interested crystal plane
-h=[Miller(1,1,1,cs),Miller(1,0,0,cs),Miller(1,1,0,cs),Miller(1,1,2,cs)];
-% define the burger vector of the corresponding slip planes
-b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw')];
+% h=[Miller(1,1,1,cs),Miller(1,0,0,cs),Miller(1,1,0,cs),Miller(1,1,2,cs),Miller(1,1,3,cs),Miller(1,1,4,cs),Miller(1,1,5,cs),Miller(1,1,6,cs),Miller(1,1,11,cs)];% define the burger vector of the corresponding slip planes
+% b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw')];
+h=[Miller(0,0,0,1,cs),Miller(1,0,-1,0,cs)]
 % define the name of each system
-slip_name = ["111","100","110","112"];
+slip_name = ["111","100","110","112","113","114","115","116","1111"];
 % define colors for slip lines
-col=['r','b','g','y']; % define color for each slip system
+col=["r",'b','g','y','c','m','k','w',"[0,0.5,0.5]","[0.5,0,0.5]",]; % define color for each slip system
 TA=5; % threshold angle fore slip system determination
 Len =200; % the length of the theorectical lines in the right conner
 TAS=0; % threshold angle for slip systems between sample and surface, leave 0 if you want to account for all slip lines
