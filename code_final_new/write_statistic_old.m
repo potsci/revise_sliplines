@@ -27,8 +27,13 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
     Phi = repmat(T(2),size(Ss,1),1);
     phi2 = repmat(T(3),size(Ss,1),1);
 %     slip
+    if size(line2,3)>1
     p1=vertcat(line2{:,:,1});
     p2=vertcat(line2{:,:,2});
+    else
+    p1=vertcat(line2{:,1});
+    p2=vertcat(line2{:,2});
+    end
     output_current=table(image_index,index, phi1, Phi, phi2, Ss,slip_name_out,devang,surfang,p1(:,1),p1(:,2),p2(:,1),p2(:,2));
 %%
     writetable(output_current,[subfolder,'\',output_file, '.xlsx'],'Sheet',1,...

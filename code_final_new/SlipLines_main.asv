@@ -232,9 +232,7 @@ while (strcmp(Rep,'y'))
        end
         
      %% save the slip lines, image file and orientation to matlab variable
-     save(sprintf('%s\\%s%s.mat',path,output_file,file(1:end-4)),"oriI","line2")
-%      savematrix(sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
-     writetable(struct2table(line2), sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
+     save(sprintf('%s\%s%s'[path+'\'+output_file,+file(1:end-3)+'.mat'],oriI,line2)
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,hSS,col,TA,TAS,size(h,2));
