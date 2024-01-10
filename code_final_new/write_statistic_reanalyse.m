@@ -1,6 +1,6 @@
 % This function write the statistic in to a excel, which consist of the image
 % number, slip lines index, euler angle and the active slip system
-function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,devang,surfang,line2,index)
+function write_statistic_reanalyse(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,devang,surfang,line2,index)
 % function write_statistic(subfolder,file,Rep_counts,output_file,T,Ss,slip_name,devang,line2)
     if ~isfile([subfolder, '\', output_file, '.xlsx'])
         %%
@@ -9,12 +9,12 @@ function write_statistic_old(subfolder,file,Rep_counts,output_file,T,Ss,slip_nam
          writematrix(headline,[subfolder,'\', output_file, '.csv'],'Delimiter',';');
     end
     %%
-    disp(':)')
+    disp(';)')
     % Import the data
     output_old = readtable([subfolder,'\' output_file,'.xlsx'],'Sheet',1);
 %%
     size_old=size(output_old,1);
-    file=convertCharsToStrings(file);
+    file=convertCharsToStrings([file]);
 %%
     image_index=repmat([file],size(Ss,1),1);
 %     image_index=repmat([file(1:end-4) '_' num2str(Rep_counts)],size(Ss,1),1);

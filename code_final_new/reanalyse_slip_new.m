@@ -1,18 +1,19 @@
 %  addpath C:\Users\berners\mtex-5.7.0
- startup_mtex
+%  startup_mtex
 %%
  cs = crystalSymmetry('m-3m', [8.04 8.04 8.04], 'X||a', 'Y||b*','Z||c',...
     'mineral', 'Al2Ca', 'color', 'light blue');
 % define the interested crystal plane
 h=[Miller(1,1,1,cs),Miller(1,0,0,cs),Miller(1,1,0,cs),Miller(1,1,2,cs),Miller(1,1,3,cs),Miller(1,1,4,cs),Miller(1,1,5,cs)];
 % define the burger vector of the corresponding slip planes
-b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw')];
+% b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw')];
 % define the name of each system
 slip_name = ["111","100","110","112","113","114","115"];
 % define colors for slip lines
 col=["r",'b','g','y','cyan','magenta','white']; % define color for each slip system
-TA=3; % threshold angle fore slip system determination
-TA_surface=10;
+TA=5; % threshold angle fore slip system determination
+TA_surface=0;
+output_num=3
 Len =100; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); %
@@ -45,6 +46,12 @@ control_i=1;
 check_error=0;
 control_j=1;
 %%
+% output_file='reanalyse_slip';
+d=datetime('now')
+d.Format = 'yyyy_MM_dd_HH_mm_ss'
+output_file=[]
+
+
 
 for i=control_i:numel(folders)
 %%
@@ -82,7 +89,19 @@ joined_tab=innerjoin(selection,euler_t,'LeftKeys','file','RightKeys','u_imgs');
 if check_error==1
 control_j=1;
 end
+
+path_withouthspace=erase(selection.folder{1},' ')
+    sub_str_split=strsplit(path_withouthspace,'\')
+    for i=0:output_num
+        output_file=[(sub_str_split{end-i}),'_', output_file];
+    end
+    %             d=datetime('now')
+    %             d.Format = 'yyyy_MM_dd_HH_mm_ss'
+     output_file=[output_file, '_', char(d)]
+
+
     for j=control_j:numel(u_imgs)
+        
         check_error=0;
         
         %%
@@ -93,7 +112,7 @@ end
 %         SE_marked=imread([selection.folder{1},'\' selection.file{1}, '_extract_lines.png']);
         % input the euler angle
 %         T = str2double(inputdlg({'phi1:','PHI:','phi2:'},'Eule Angle',[1 50])); 
-                 oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,selection.eulers3(1)*degree,cs);
+         oriI=orientation('Euler',selection.eulers1(1)*degree,selection.eulers2(1)*degree,selection.eulers3(1)*degree,cs);
 %          oriI=Rot*oriI; % i think we can drop this, as the eulers are
 %         saved after this step
         % loade SEM for the first time
@@ -108,7 +127,11 @@ end
 %             end
 %         end
 %         end
+    %% Generate the output path
+    
 
+    
+    
     %% Mark the slip traces
        fi=figure('units','normalized','outerposition',[0 0 1 1]);
        subplot(1,1,1)
@@ -162,18 +185,23 @@ end
             hSS{m}=normalize(oriI*th); % convert to the specimen symmetery
             if hSS{m}==vector3d.Z | hSS{m}==-vector3d.Z
                 fprintf(['\n plane' char(h(m)), 'is parallel to Z plane \n']);
+                hSSt{m}=normalize(cross(hSS{m},vector3d(1,1,1000)));
             else
                 hSSt{m}=normalize(cross(hSS{m},vector3d.Z)); % traces on the observing plane
                 hSSt{m}.antipodal=1;
                 
             end
         end
-        
+        file=selection.file{1}
+     save(sprintf('%s\\%s%s.mat',path,output_file,file(1:end-4)),"oriI","line")
+%      savematrix(sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
+     writetable(struct2table(line), sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
         
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang,surfang]=compareInrange(SE,line,hSSt,hSS,col,TA,TA_surface,size(h,2));  
           %
+          %%
          [ass_r,devang_r,surfang_r,line_test,img_ind]=reshape_inputs(ASS,devang,surfang,line,slip_name);
 % %      %%
 %           line_t=table(horzcat(line.point1),horzcat(line.point2))
@@ -190,12 +218,12 @@ end
 %         end
     %% statistics
 %     if Rep_counts==1
-    output_file='reanalyse_slip';
+%     output_file='reanalyse_slip';
 %     end
 %     for n=1:numel(slip_name)
 %         assignin('caller',slip_name(n),[]);
 %     end
-    write_statistic_old([selection.folder{1}],selection.file(1),j,output_file,[oriI.phi1/degree,...
+    write_statistic_reanalyse([selection.folder{1}],selection.file{1},j,output_file,[oriI.phi1/degree,...
             oriI.Phi/degree,oriI.phi2/degree],ass_r,slip_name,devang_r,surfang_r,line_test,img_ind);
 %     Rep=input('\ncontinue to analyze new with same Alignment:','s');
 %     if strcmp(Rep,'y')

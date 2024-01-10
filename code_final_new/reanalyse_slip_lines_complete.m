@@ -22,7 +22,7 @@ slip_name = ["111","100","110","112","113","114","115"];
 % define colors for slip lines
 col=['r','b','g','y']; % define color for each slip system
 TA=3; % threshold angle fore slip system determination
-TA_surface=0;%threshold angle with respect to the materials surface
+TA_surface=10;%threshold angle with respect to the materials surface
 Len =200; % the length of the theorectical lines in the right conner
 % coordination convert from Euler aquiring to the SE
 Rot=rotation.byAxisAngle(xvector-yvector,180*degree); % EDAX system, Euler angle from OIM

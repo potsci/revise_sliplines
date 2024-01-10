@@ -57,9 +57,9 @@ clear
 cs = crystalSymmetry('m-3m', [8.04 8.04 8.04], 'X||a', 'Y||b*','Z||c',...
     'mineral', 'Al2Ca', 'color', 'light blue');
 % define the interested crystal plane
-% h=[Miller(1,1,1,cs),Miller(1,0,0,cs),Miller(1,1,0,cs),Miller(1,1,2,cs),Miller(1,1,3,cs),Miller(1,1,4,cs),Miller(1,1,5,cs),Miller(1,1,6,cs),Miller(1,1,11,cs)];% define the burger vector of the corresponding slip planes
+h=[Miller(1,1,1,cs),Miller(1,0,0,cs),Miller(1,1,0,cs),Miller(1,1,2,cs),Miller(1,1,3,cs),Miller(1,1,4,cs),Miller(1,1,5,cs),Miller(1,1,6,cs),Miller(1,1,11,cs)];% define the burger vector of the corresponding slip planes
 % b=[Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw'),Miller(1,1,2,cs,'uvw'),Miller(1,1,0,cs,'uvw')];
-h=[Miller(0,0,0,1,cs),Miller(1,0,-1,0,cs)]
+% h=[Miller(0,0,0,1,cs),Miller(1,0,-1,0,cs)]
 % define the name of each system
 slip_name = ["111","100","110","112","113","114","115","116","1111"];
 % define colors for slip lines
@@ -232,9 +232,9 @@ while (strcmp(Rep,'y'))
        end
         
      %% save the slip lines, image file and orientation to matlab variable
-     save(sprintf('%s\\%s%s.mat',path,output_file,file(1:end-4)),"oriI","line2")
+     save(sprintf('%s\\%s%s.mat',path1,output_file,file(1:end-4)),"oriI","line2")
 %      savematrix(sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
-     writetable(struct2table(line2), sprintf('%s\\%s%s.csv',path,output_file,file(1:end-4)))
+     writetable(struct2table(line2), sprintf('%s\\%s%s.csv',path1,output_file,file(1:end-4)))
     %% Compare deviation
 %         ASS=compare(SE,line2,hSSt,col,TA,size(h,2),slip_name);
           [ASS,devang,surfang]=compareInrange(SE,line2,hSSt,hSS,col,TA,TAS,size(h,2));

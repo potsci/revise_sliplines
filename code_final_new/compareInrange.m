@@ -23,10 +23,12 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,TAS,num_sl
          v = normalize(vector3d(xyi(1),xyi(2),0));
          % calculate the minimum angle betwwen the marked lines and the
          % theoretical lines
+         %%
          for j=1:size(hSSt,2)
-             j=1
+% % % % %              j=1
 %              disp(j)
              An=angle(v,hSSt{j})/degree;
+             %%
              An=round(An,4);
              [An_un,an_un_ind]=unique(An);
              min_ind=An_un<TA;
@@ -43,7 +45,7 @@ function [Ss,devang,surfang]=compareInrange(SEI,line2,hSSt,hSS,col,TA,TAS,num_sl
              s_A=size(Anmin);
              for k=1:s_A(2)
              if ~isempty(Anmin)
-                 if surfang_min(k)>TAS
+                 if surfang_min(k)>=TAS
                  Ss(i,j,k)=j;
                  surfang(i,j,k)=surfang_min(k);
                  devang(i,j,k)=Anmin(k);
